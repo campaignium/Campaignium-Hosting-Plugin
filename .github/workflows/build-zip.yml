@@ -1,0 +1,35 @@
+name: Build Plugin ZIP
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+
+    - name: Rename folder
+      run: |
+        mkdir campaignium-hosting
+        shopt -s extglob
+        mv !(campaignium-hosting) campaignium-hosting/
+
+    - name: Create ZIP archive
+      run: |
+        zip -r campaignium-hosting.zip campaignium-hosting
+
+    - name: Upload ZIP to Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: campaignium-hosting.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
