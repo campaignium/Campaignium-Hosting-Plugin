@@ -2,7 +2,7 @@
 /*
 Plugin Name: Campaignium Hosting
 Description: Hides the WP Engine dashboard menu for all users except those with an email ending in @campaignium.com.
-Version: 1.0.6
+Version: 1.0.7
 Author: Campaignium
 */
 
@@ -49,7 +49,5 @@ $myUpdateChecker = PucFactory::buildUpdateChecker(
 );
 
 $myUpdateChecker->setAuthentication('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');
-
-$myUpdateChecker->getVcsApi()->enableReleaseAssets();
 
 error_log( 'Release asset download URL: ' . $myUpdateChecker->getVcsApi()->getLatestRelease()->downloadUrl );
