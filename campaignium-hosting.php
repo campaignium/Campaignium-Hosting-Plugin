@@ -2,7 +2,7 @@
 /*
 Plugin Name: Campaignium Hosting
 Description: Hides the WP Engine dashboard menu for all users except those with an email ending in @campaignium.com.
-Version: 1.0.5
+Version: 1.0.6
 Author: Campaignium
 */
 
