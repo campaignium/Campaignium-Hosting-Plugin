@@ -2,7 +2,7 @@
 /*
 Plugin Name: Campaignium Hosting
 Description: Hides the WP Engine dashboard menu for all users except those with an email ending in @campaignium.com.
-Version: 1.0.1
+Version: 1.0.4
 Author: Campaignium
 */
 
@@ -39,10 +39,11 @@ function campaignium_hide_wpengine_menu_css() {
 add_action('admin_footer', 'campaignium_hide_wpengine_menu_css');
 
 require_once __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
-require_once __DIR__ . '/plugin-update-checker/vendor/autoload.php';
 
-$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-    'https://github.com/campaignium/Campaignium-Hosting-Plugin.git',
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+    'https://github.com/Campaignium/Campaignium-Hosting-Plugin/',
     __FILE__,
     'campaignium-hosting'
 );
