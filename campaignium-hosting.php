@@ -38,7 +38,7 @@ function campaignium_hide_wpengine_menu_css() {
 }
 add_action('admin_footer', 'campaignium_hide_wpengine_menu_css');
 
-require 'plugin-update-checker/plugin-update-checker.php';
+require_once __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
 
 $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
     'https://github.com/campaignium/Campaignium-Hosting-Plugin.git',
