@@ -3,6 +3,7 @@ name: Build Plugin ZIP
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   build-zip:
@@ -21,13 +22,9 @@ jobs:
       - name: Zip plugin
         run: zip -r campaignium-hosting.zip campaignium-hosting
 
-      - name: Upload plugin zip
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./campaignium-hosting.zip
-          asset_name: campaignium-hosting.zip
+          files: campaignium-hosting.zip
+          token: ${{ secrets.GH_PAT }}
           asset_content_type: application/zip
-
