@@ -22,7 +22,7 @@ jobs:
       - name: Zip plugin
         run: zip -r campaignium-hosting.zip campaignium-hosting
 
-      - name: Upload release asset
+      - name: Upload plugin zip (PUBLICLY ACCESSIBLE!)
         uses: softprops/action-gh-release@v1
         with:
           files: campaignium-hosting.zip
