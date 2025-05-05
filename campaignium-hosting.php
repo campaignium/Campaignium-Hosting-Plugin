@@ -48,6 +48,7 @@ $myUpdateChecker = PucFactory::buildUpdateChecker(
     'campaignium-hosting'
 );
 
-$myUpdateChecker->setAuthentication('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');
+$myUpdateChecker->getVcsApi()->enableReleaseAssets();
 
-error_log( 'Release asset download URL: ' . $myUpdateChecker->getVcsApi()->getLatestRelease()->downloadUrl );
+
+error_log('Release asset download URL: ' . $myUpdateChecker->getVcsApi()->getLatestRelease()->downloadUrl);
