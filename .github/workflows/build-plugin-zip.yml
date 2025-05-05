@@ -16,8 +16,7 @@ jobs:
       - name: Create plugin folder
         run: |
           mkdir campaignium-hosting
-          shopt -s extglob
-          mv !(campaignium-hosting) campaignium-hosting/
+          rsync -av --exclude=campaignium-hosting --exclude=.git --exclude=.github ./ campaignium-hosting/
 
       - name: Zip plugin
         run: zip -r campaignium-hosting.zip campaignium-hosting
