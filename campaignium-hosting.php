@@ -1,30 +1,53 @@
-name: Build Plugin ZIP
+<?php
+/*
+Plugin Name: Campaignium Hosting
+Description: Hides the WP Engine dashboard menu for all users except those with an email ending in @campaignium.com.
+Version: 1.0.7
+Author: Campaignium
+*/
 
-on:
-  release:
-    types: [published]
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 
-jobs:
-  build-zip:
-    name: Build and upload plugin zip
-    runs-on: ubuntu-latest
+function campaignium_hide_wpengine_menu() {
+    if (!is_user_logged_in()) {
+        return;
+    }
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    $user = wp_get_current_user();
+    $email = $user->user_email;
 
-      - name: Create plugin folder
-        run: |
-          mkdir campaignium-hosting
-          shopt -s extglob
-          mv !(campaignium-hosting) campaignium-hosting/
+    if (strpos($email, '@campaignium.com') === false) {
+        remove_menu_page('wpe-common');
+    }
+}
+add_action('admin_menu', 'campaignium_hide_wpengine_menu', 999);
 
-      - name: Zip plugin
-        run: zip -r campaignium-hosting.zip campaignium-hosting
+function campaignium_hide_wpengine_menu_css() {
+    if (!is_user_logged_in()) {
+        return;
+    }
 
-      - name: Upload release asset
-        uses: softprops/action-gh-release@v1
-        with:
-          files: campaignium-hosting.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    $user = wp_get_current_user();
+    $email = $user->user_email;
+
+    if (strpos($email, '@campaignium.com') === false) {
+        echo '<style>#toplevel_page_wpe-common { display: none !important; }</style>';
+    }
+}
+add_action('admin_footer', 'campaignium_hide_wpengine_menu_css');
+
+require_once __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
+
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+    'https://github.com/Campaignium/Campaignium-Hosting-Plugin/',
+    __FILE__,
+    'campaignium-hosting'
+);
+
+$myUpdateChecker->setAuthentication('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');
+
+error_log( 'Release asset download URL: ' . $myUpdateChecker->getVcsApi()->getLatestRelease()->downloadUrl );
