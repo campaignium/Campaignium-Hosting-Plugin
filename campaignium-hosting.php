@@ -33,7 +33,7 @@ function campaignium_hide_wpengine_menu_css() {
     $email = $user->user_email;
 
     if (strpos($email, '@campaignium.com') === false) {
-        echo '<style>#toplevel_page_wpengine-common { display: none !important; }</style>';
+        echo '<style>#wp-admin-bar-wpengine_adminbar { display: none !important; }</style>';
     }
 }
 add_action('admin_footer', 'campaignium_hide_wpengine_menu_css');
