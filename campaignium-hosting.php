@@ -2,7 +2,7 @@
 /*
 Plugin Name: Campaignium Hosting
 Description: Hides the WP Engine dashboard menu for all users except those with an email ending in @campaignium.com.
-Version: 1.1.7
+Version: 1.1.8
 Author: Campaignium
 */
 
@@ -19,7 +19,7 @@ function campaignium_hide_wpengine_menu() {
     $email = $user->user_email;
 
     if (strpos($email, '@campaignium.com') === false) {
-        remove_menu_page('wpe-common');
+        remove_menu_page('wpengine-common');
     }
 }
 add_action('admin_menu', 'campaignium_hide_wpengine_menu', 999);
@@ -33,7 +33,7 @@ function campaignium_hide_wpengine_menu_css() {
     $email = $user->user_email;
 
     if (strpos($email, '@campaignium.com') === false) {
-        echo '<style>#toplevel_page_wpe-common { display: none !important; }</style>';
+        echo '<style>#toplevel_page_wpengine-common { display: none !important; }</style>';
     }
 }
 add_action('admin_footer', 'campaignium_hide_wpengine_menu_css');
