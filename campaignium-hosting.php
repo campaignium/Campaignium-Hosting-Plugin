@@ -57,14 +57,17 @@ function campaignium_hide_wpengine_css() {
 add_action( 'admin_footer', 'campaignium_hide_wpengine_css' );
 add_action( 'wp_footer',    'campaignium_hide_wpengine_css' );
 
-/**
- * 4. GitHub self-updates (unchanged)
- */
 require_once __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
+
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
-PucFactory::buildUpdateChecker(
-	'https://github.com/Campaignium/Campaignium-Hosting-Plugin/',
-	__FILE__,
-	'campaignium-hosting'
-)->getVcsApi()->enableReleaseAssets();
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+    'https://github.com/Campaignium/Campaignium-Hosting-Plugin/',
+    __FILE__,
+    'campaignium-hosting'
+);
+
+$myUpdateChecker->getVcsApi()->enableReleaseAssets();
+
+
+error_log('Release asset download URL: ' . $myUpdateChecker->getVcsApi()->getLatestRelease()->downloadUrl);
