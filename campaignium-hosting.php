@@ -1,42 +1,56 @@
 <?php
 /*
 Plugin Name: Campaignium Hosting
-Description: Hides the WP Engine dashboard menu for all users except those with an email ending in @campaignium.com.
-Version: 1.2.1
-Author: Campaignium
+Description: Hide WP Engine UI for anyone whose e-mail is NOT @campaignium.com, plus self-update from GitHub.
+Version: 1.2.3
+Author:  Campaignium
 */
 
-if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-function campaignium_hide_wpengine_menu() {
-    if (!is_user_logged_in()) {
-        return;
-    }
+/* ─────────────────────────────────────────────
+ * 1.  Hide the WP-Engine sidebar entry (wp-admin)
+ * ──────────────────────────────────────────── */
+add_action( 'admin_menu', function () {
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+	$user = wp_get_current_user();
+	if ( strpos( $user->user_email, '@campaignium.com' ) === false ) {
+		remove_menu_page( 'wpengine-common' );
+	}
+}, 999 );
 
-    $user = wp_get_current_user();
-    $email = $user->user_email;
+/* ─────────────────────────────────────────────
+ * 2.  Hide the WP-Engine toolbar item (front- & back-end)
+ * ──────────────────────────────────────────── */
+add_action( 'admin_bar_menu', function ( WP_Admin_Bar $bar ) {
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+	$user = wp_get_current_user();
+	if ( strpos( $user->user_email, '@campaignium.com' ) === false ) {
+		$bar->remove_node( 'wpengine_adminbar' );   // current slug
+		$bar->remove_node( 'wpengine-userportal' ); // legacy slug (older installs)
+	}
+}, 999 );
 
-    if (strpos($email, '@campaignium.com') === false) {
-        remove_menu_page('wpengine-common');
-    }
+/*  Fallback CSS in case another plugin re-adds it later with JS.
+    Runs on *every* page, not just wp-admin. */
+add_action( 'wp_footer',    'campaignium_hide_wpengine_css' );
+add_action( 'admin_footer', 'campaignium_hide_wpengine_css' );
+function campaignium_hide_wpengine_css() {
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+	$user = wp_get_current_user();
+	if ( strpos( $user->user_email, '@campaignium.com' ) === false ) {
+		echo '<style>#wp-admin-bar-wpengine_adminbar{display:none!important}</style>';
+	}
 }
-add_action('admin_menu', 'campaignium_hide_wpengine_menu', 999);
 
-function campaignium_hide_wpengine_menu_css() {
-    if (!is_user_logged_in()) {
-        return;
-    }
-
-    $user = wp_get_current_user();
-    $email = $user->user_email;
-
-    if (strpos($email, '@campaignium.com') === false) {
-        echo '<style>#wp-admin-bar-wpengine_adminbar { display: none !important; }</style>';
-    }
-}
-add_action('admin_footer', 'campaignium_hide_wpengine_menu_css');
 
 require_once __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
 
@@ -49,6 +63,3 @@ $myUpdateChecker = PucFactory::buildUpdateChecker(
 );
 
 $myUpdateChecker->getVcsApi()->enableReleaseAssets();
-
-
-error_log('Release asset download URL: ' . $myUpdateChecker->getVcsApi()->getLatestRelease()->downloadUrl);
