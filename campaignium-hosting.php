@@ -3,7 +3,7 @@
 Plugin Name: Campaignium Hosting
 Description: Streamlines the WordPress admin experience for Campaignium-managed sites and integrates a private release workflow for seamless updates.
 
-Version: 1.2.3
+Version: 1.2.4
 Author:  Campaignium
 */
 
