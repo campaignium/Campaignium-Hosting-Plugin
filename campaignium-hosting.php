@@ -1,7 +1,8 @@
 <?php
 /*
 Plugin Name: Campaignium Hosting
-Description: Hide WP Engine UI for anyone whose e-mail is NOT @campaignium.com, plus self-update from GitHub.
+Description: Streamlines the WordPress admin experience for Campaignium-managed sites and integrates a private release workflow for seamless updates.
+
 Version: 1.2.3
 Author:  Campaignium
 */
